@@ -33,3 +33,11 @@ class TestUserGender:
         # it should be not None, depends on documentation
         # but there is no info about such behaviour in the doc =)
         assert response.json().get('errorMessage') is not None
+
+    # this test might be flaky in case of huge number of registration,
+    # but probability of this case is extremely low
+    @pytest.mark.parametrize('gender', ['male', 'female'])
+    def test_idempotence(self, gender):
+        first_response = requests.get(self.url, params={'gender': gender})
+        second_response = requests.get(self.url, params={'gender': gender})
+        assert first_response.json() == second_response.json()
