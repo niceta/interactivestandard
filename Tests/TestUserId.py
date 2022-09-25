@@ -36,3 +36,10 @@ class TestUserId:
         # it should be not None, depends on documentation
         # but there is no info about such behaviour in the doc =)
         assert response.json().get('errorMessage') is not None
+
+    def test_idempotence(self):
+        existing_user_id = '5'
+        first_response = requests.get(self.url + existing_user_id)
+        second_response = requests.get(self.url + existing_user_id)
+        assert first_response.json() == second_response.json()
+
