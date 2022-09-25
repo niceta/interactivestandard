@@ -2,6 +2,7 @@ import pytest
 import requests
 from pytest_schema import schema
 
+
 class TestUserId:
     url = 'https://hr-challenge.interactivestandard.com/api/test/user/'
 
@@ -28,3 +29,10 @@ class TestUserId:
         existing_user_id = '5'
         response = requests.get(self.url + existing_user_id)
         assert schema(expected_schema) == response.json()
+
+    @pytest.mark.parametrize('user_id', ['-5', '0', 'qwe', '!@#$'])
+    def test_negative_input(self, user_id):
+        response = requests.get(self.url + user_id)
+        # it should be not None, depends on documentation
+        # but there is no info about such behaviour in the doc =)
+        assert response.json().get('errorMessage') is not None
