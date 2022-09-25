@@ -43,3 +43,7 @@ class TestUserId:
         second_response = requests.get(self.url + existing_user_id)
         assert first_response.json() == second_response.json()
 
+    def test_content_type(self):
+        existing_user_id = '5'
+        response = requests.get(self.url + existing_user_id)
+        assert response.headers.get('content-type') == 'application/json;charset=UTF-8'
