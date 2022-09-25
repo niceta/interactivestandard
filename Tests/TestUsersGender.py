@@ -41,3 +41,10 @@ class TestUserGender:
         first_response = requests.get(self.url, params={'gender': gender})
         second_response = requests.get(self.url, params={'gender': gender})
         assert first_response.json() == second_response.json()
+
+    def test_result_for_male_and_female_should_be_different(self):
+        male_response = requests.get(self.url, params={'gender': 'male'})
+        female_response = requests.get(self.url, params={'gender': 'female'})
+        male_result = set(male_response.json().get('result'))
+        female_result = set(female_response.json().get('result'))
+        assert len(male_result & female_result) == 0
