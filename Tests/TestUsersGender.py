@@ -21,3 +21,9 @@ class TestUserGender:
     def test_positive_response_result(self, gender):
         response = requests.get(self.url, params={'gender': gender})
         all([isinstance(i, int) for i in response.json().get('result')])
+
+    @pytest.mark.parametrize('gender', ['male', 'female'])
+    def test_content_type(self, gender):
+        response = requests.get(self.url, params={'gender': gender})
+        assert response.headers.get('content-type') == 'application/json;charset=UTF-8'
+        
