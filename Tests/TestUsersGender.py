@@ -26,4 +26,10 @@ class TestUserGender:
     def test_content_type(self, gender):
         response = requests.get(self.url, params={'gender': gender})
         assert response.headers.get('content-type') == 'application/json;charset=UTF-8'
-        
+
+    @pytest.mark.parametrize('wrong_gender', ['0', '1', 'true', 'false', 'magic', 'McCloud'])
+    def test_negative_input(self, wrong_gender):
+        response = requests.get(self.url, params={'gender': wrong_gender})
+        # it should be not None, depends on documentation
+        # but there is no info about such behaviour in the doc =)
+        assert response.json().get('errorMessage') is not None
